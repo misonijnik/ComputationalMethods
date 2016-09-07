@@ -3,8 +3,8 @@ module NonlinearEquation where
 import           Prelude
 
 equation :: Double -> Double
--- equation x = 25552 - 30 * x ** 2 + x ** 3
-equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 80000 * x + 32000
+equation x = 25552 - 30 * x ** 2 + x ** 3
+-- equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 80000 * x + 32000
 
 type Segment = (Double, Double)
 
@@ -29,15 +29,15 @@ tabulation (a, b) h
     | otherwise = tabulation (c, b) h
     where c = a + h
 
-bisection :: Double -> Segment -> Writer [Double] Double 
+bisection :: Double -> Segment -> [Double]
 bisection eps (a,b)
-    | abs (a - b) <= 2 * eps = c
-    | isRoot a c = bisection eps (a, c)
-    | isRoot c b = bisection eps (c, b)
+    | abs (a - b) <= 2 * eps = [c]
+    | isRoot a c = c : bisection eps (a, c)
+    | isRoot c b = c : bisection eps (c, b)
     where c = (a + b)/2
 
 
 
-result :: Methods -> [Double]
+result :: Methods -> [[Double]]
 result typeM
     | typeM == Bisec = map (bisection epsilon) $ tabulation lineSegment step
