@@ -57,16 +57,25 @@ newtonApproximation x = x - equation x/diffEquation x
 newtonApproximationModify :: (Value, Value) -> Value
 newtonApproximationModify (x, y) = x - equation x / y
 
+secantApproximation :: (Value, Value) -> (Value, Value)
+secantApproximation (x, y) = (y, y - equation y * (y - x) / (equation y - equation x))
+
+secant :: Epsilon -> Segment -> [Double]
+secant eps x@(a, b)
+    | abs (a - b) <= eps = [b]
+    | otherwise          = snd pair : secant eps pair
+    where pair =  secantApproximation x
+
 newtonModify :: Value -> Epsilon -> Value -> [Value]
 newtonModify diffVal eps x
-    | abs (x - xk) < eps = [xk]
+    | abs (x - xk) <= eps = [xk]
     | otherwise          = xk : newtonModify diffVal eps xk
     where xk = newtonApproximationModify (x, diffVal)
 
 -- (эпсилон, x к-тое)
 newton :: Epsilon -> Value -> [Value]
 newton eps x
-    | abs (x - xk) < eps = [xk]
+    | abs (x - xk) <= eps = [xk]
     | otherwise          = xk : newton eps xk
     where xk = newtonApproximation x
 
@@ -78,3 +87,6 @@ newtonMethods = map (newton epsilon . initialApproximation) tabulatedSegments
 
 newtonModifyMethods :: [[Value]]
 newtonModifyMethods = map (\val -> newtonModify (diffEquation . initialApproximation $ val)  epsilon (initialApproximation val)) tabulatedSegments
+
+secantMethods :: [[Double]]
+secantMethods = map (secant epsilon) tabulatedSegments
