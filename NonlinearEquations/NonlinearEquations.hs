@@ -3,18 +3,19 @@ module NonlinearEquation where
 import           Prelude
 import           Writer
 
-equation :: Double -> Double
-equation x = 25552 - 30 * x ** 2 + x ** 3
-
-diffEquation :: Double -> Double
-diffEquation x = -60 * x + 3 * x ** 2
-
---equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 80000 * x + 32000
-
 type Segment = (Double, Double)
 data Methods = Bisection | Newton deriving (Eq, Show)
 type Epsilon = Double
 type Value   = Double 
+
+equation :: Value -> Value
+--equation x = 25552 - 30 * x ** 2 + x ** 3
+
+diffEquation :: Value -> Value
+--diffEquation x = -60 * x + 3 * x ** 2
+
+equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 80000 * x + 32000
+diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 80000  
 
 lineSegment :: Segment
 lineSegment = (-10000, 10000)
@@ -53,10 +54,14 @@ bisection eps (a,b)
 newtonApproximation ::  Value -> Value
 newtonApproximation x = x - equation x/diffEquation x
 
---newtonApproximationModify :: Value -> Value
---newtonApproximationModify x = equation x / 
+newtonApproximationModify :: (Value, Value) -> Value
+newtonApproximationModify (x, y) = x - equation x / y
 
---newModify :: Double -> Double -> Double -> [Double]
+newtonModify :: Value -> Epsilon -> Value -> [Value]
+newtonModify diffVal eps x
+    | abs (x - xk) < eps = [xk]
+    | otherwise          = xk : newtonModify diffVal eps xk
+    where xk = newtonApproximationModify (x, diffVal)
 
 -- (эпсилон, x к-тое)
 newton :: Epsilon -> Value -> [Value]
@@ -70,3 +75,6 @@ bisectionMethods = map (runWriter . bisection epsilon) tabulatedSegments
 
 newtonMethods :: [[Value]]
 newtonMethods = map (newton epsilon . initialApproximation) tabulatedSegments
+
+newtonModifyMethods :: [[Value]]
+newtonModifyMethods = map (\val -> newtonModify (diffEquation . initialApproximation $ val)  epsilon (initialApproximation val)) tabulatedSegments
