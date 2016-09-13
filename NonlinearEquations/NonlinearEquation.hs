@@ -6,16 +6,15 @@ import           Writer
 type Segment = (Double, Double)
 data Methods = Bisection | Newton deriving (Eq, Show)
 type Epsilon = Double
-type Value   = Double 
+type Value   = Double
 
 equation :: Value -> Value
---equation x = 25552 - 30 * x ** 2 + x ** 3
+equation x = 25552 - 30 * x ** 2 + x ** 3
+--equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 80000 * x + 32000
 
 diffEquation :: Value -> Value
---diffEquation x = -60 * x + 3 * x ** 2
-
-equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 80000 * x + 32000
-diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 80000  
+diffEquation x = -60 * x + 3 * x ** 2
+--diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 80000
 
 lineSegment :: Segment
 lineSegment = (-10000, 10000)
@@ -79,14 +78,14 @@ newton eps x
     | otherwise          = xk : newton eps xk
     where xk = newtonApproximation x
 
-bisectionMethods :: [(Segment, [Value])]
-bisectionMethods = map (runWriter . bisection epsilon) tabulatedSegments
+bisectionMethods :: [(Segment, (Segment, [Value]))]
+bisectionMethods = zip  tabulatedSegments $ map (runWriter . bisection epsilon) tabulatedSegments
 
-newtonMethods :: [[Value]]
-newtonMethods = map (newton epsilon . initialApproximation) tabulatedSegments
+newtonMethods :: [(Segment, [Value])]
+newtonMethods = zip tabulatedSegments $ map (newton epsilon . initialApproximation) tabulatedSegments
 
-newtonModifyMethods :: [[Value]]
-newtonModifyMethods = map (\val -> newtonModify (diffEquation . initialApproximation $ val)  epsilon (initialApproximation val)) tabulatedSegments
+newtonModifyMethods :: [(Segment, [Value])]
+newtonModifyMethods = zip tabulatedSegments $ map (\val -> newtonModify (diffEquation . initialApproximation $ val)  epsilon (initialApproximation val)) tabulatedSegments
 
-secantMethods :: [[Double]]
-secantMethods = map (secant epsilon) tabulatedSegments
+secantMethods :: [(Segment, [Double])]
+secantMethods = zip tabulatedSegments $ map (secant epsilon) tabulatedSegments
