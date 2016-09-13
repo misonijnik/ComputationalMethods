@@ -9,20 +9,37 @@ type Epsilon = Double
 type Value   = Double
 
 equation :: Value -> Value
---equation x = 4 * p * radius ** 3 - 3 * radius * x ** 2 + x ** 3
+equation x = 4 * p * radius ** 3 - 3 * radius * x ** 2 + x ** 3
 --equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 8000 * x + 32000
-equation x = (2 - x)* exp x - 0.5
+--equation x = (2 - x)* exp x - 0.5
 
 diffEquation :: Value -> Value
---diffEquation x = -60 * x + 3 * x ** 2
+diffEquation x = - 6 * radius * x + 3 * x ** 2
 --diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 8000
-diffEquation x = exp x - x * exp x 
+--diffEquation x = exp x - x * exp x 
+
+diap :: (Double, Double)
+diap = (0, 2 * radius)
+
 
 radius :: Double
 radius = 10
 
 p :: Double
 p = 0.92
+
+len :: Double -> Double
+len x = sqrt(400 - x**2)
+
+isInDiap :: Double -> Bool
+isInDiap x = (x >= fst diap) && (x <= snd diap)
+
+bisecVal :: (Segment, (Segment, [Value])) -> Value
+bisecVal (_, (_, arr)) = last arr
+
+anotherVal :: (Segment, [Value]) -> Value
+anotherVal (_, arr) = last arr
+
 
 lineSegment :: Segment
 lineSegment = (-10000, 10000)
