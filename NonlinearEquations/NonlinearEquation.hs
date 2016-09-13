@@ -9,21 +9,29 @@ type Epsilon = Double
 type Value   = Double
 
 equation :: Value -> Value
-equation x = 25552 - 30 * x ** 2 + x ** 3
---equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 80000 * x + 32000
+--equation x = 4 * p * radius ** 3 - 3 * radius * x ** 2 + x ** 3
+--equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 8000 * x + 32000
+equation x = (2 - x)* exp x - 0.5
 
 diffEquation :: Value -> Value
-diffEquation x = -60 * x + 3 * x ** 2
---diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 80000
+--diffEquation x = -60 * x + 3 * x ** 2
+--diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 8000
+diffEquation x = exp x - x * exp x 
+
+radius :: Double
+radius = 10
+
+p :: Double
+p = 0.92
 
 lineSegment :: Segment
 lineSegment = (-10000, 10000)
 
 step :: Epsilon
-step = 0.05
+step = 0.01
 
 epsilon :: Epsilon
-epsilon = 0.001
+epsilon = 0.0001
 
 isRoot :: Segment -> Bool
 isRoot (x, y) = (equation x * equation y) <= 0
@@ -78,14 +86,16 @@ newton eps x
     | otherwise          = xk : newton eps xk
     where xk = newtonApproximation x
 
-bisectionMethods :: [(Segment, (Segment, [Value]))]
-bisectionMethods = zip  tabulatedSegments $ map (runWriter . bisection epsilon) tabulatedSegments
+bisectionMethod :: [(Segment, (Segment, [Value]))]
+bisectionMethod = zip  tabulatedSegments $ map (runWriter . bisection epsilon) tabulatedSegments
 
-newtonMethods :: [(Segment, [Value])]
-newtonMethods = zip tabulatedSegments $ map (newton epsilon . initialApproximation) tabulatedSegments
+newtonMethod :: [(Segment, [Value])]
+newtonMethod = zip tabulatedSegments $ map (newton epsilon . initialApproximation) tabulatedSegments
 
-newtonModifyMethods :: [(Segment, [Value])]
-newtonModifyMethods = zip tabulatedSegments $ map (\val -> newtonModify (diffEquation . initialApproximation $ val)  epsilon (initialApproximation val)) tabulatedSegments
+newtonModifyMethod :: [(Segment, [Value])]
+newtonModifyMethod = zip tabulatedSegments $ map (\val -> newtonModify (diffEquation . initialApproximation $ val)  epsilon (initialApproximation val)) tabulatedSegments
 
-secantMethods :: [(Segment, [Double])]
-secantMethods = zip tabulatedSegments $ map (secant epsilon) tabulatedSegments
+secantMethod :: [(Segment, [Double])]
+secantMethod = zip tabulatedSegments $ map (secant epsilon) tabulatedSegments
+
+
