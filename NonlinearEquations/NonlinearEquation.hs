@@ -18,8 +18,6 @@ diffEquation x = - 6 * radius * x + 3 * x ** 2
 --diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 8000
 --diffEquation x = exp x - x * exp x 
 
-diap :: (Double, Double)
-diap = (0, 2 * radius)
 
 
 radius :: Double
@@ -28,11 +26,8 @@ radius = 10
 p :: Double
 p = 0.92
 
-len :: Double -> Double
+len :: Value -> Value
 len x = sqrt(400 - x**2)
-
-isInDiap :: Double -> Bool
-isInDiap x = (x >= fst diap) && (x <= snd diap)
 
 bisecVal :: (Segment, (Segment, [Value])) -> Value
 bisecVal (_, (_, arr)) = last arr
@@ -42,7 +37,7 @@ anotherVal (_, arr) = last arr
 
 
 lineSegment :: Segment
-lineSegment = (-10000, 10000)
+lineSegment = (0, 2 * radius)
 
 step :: Epsilon
 step = 0.01

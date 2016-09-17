@@ -84,26 +84,30 @@ secantHelper (seg, arrVal) = do putStrLn "Начальнай отрезок:"
                                 putStrLn "Абсолютная величина невязки:"
                                 myPutStr $ show $ abs (equation $ last arrVal)
 
+
 getVal :: IO ()
-getVal = do myPutStr "Метод половинного деления."
-            print $ filter isInDiap (map bisecVal bisectionMethod)
+getVal = do putStr "Метод половинного деления."
+            print $ map bisecVal bisectionMethod
             putStrLn "Абсолютная величина невязки:"
-            myPutStr $ show $ abs (equation $ last (filter isInDiap (map bisecVal bisectionMethod)))
-            --print $ map len $ filter isInDiap (map bisecVal bisectionMethod)
-            myPutStr "Метод Ньютона."
-            print $ filter isInDiap (map anotherVal newtonMethod)
+            myPutStr $ show $ abs $ equation $ last $ map bisecVal bisectionMethod
+            --myPutStr $ show $ map (len . bisecVal) bisectionMethod
+
+            putStr "Метод Ньютона."
+            print $ map anotherVal newtonMethod
             putStrLn "Абсолютная величина невязки:"
-            myPutStr $ show $ abs (equation $ last (filter isInDiap (map anotherVal newtonMethod)))
-            --print $ map len $ filter isInDiap (map anotherVal newtonMethod
-            myPutStr "Модифицированный метод Ньютона"
-            print $ filter isInDiap (map anotherVal newtonModifyMethod)
+            myPutStr $ show $ abs $ equation $ last $ map anotherVal newtonMethod
+            --myPutStr $ show $ map (len . anotherVal) newtonMethod
+
+            putStr "Модифицированный метод Ньютона"
+            print $ map anotherVal newtonModifyMethod
             putStrLn "Абсолютная величина невязки:"
-            myPutStr $ show $ abs (equation $ last (filter isInDiap (map anotherVal newtonModifyMethod)))
-            --print $ map len $ filter isInDiap (map anotherVal newtonModifyMethod)
-            myPutStr "Метод секущих."
-            print $ filter isInDiap (map anotherVal secantMethod)
+            myPutStr $ show $ abs $ equation $ last $ map anotherVal newtonModifyMethod
+            -- myPutStr $ show $ map (len.anotherVal) newtonModifyMethod
+
+            putStr "Метод секущих."
+            print $ map anotherVal secantMethod
             putStrLn "Абсолютная величина невязки:"
-            myPutStr $ show $ abs (equation $ last (filter isInDiap (map anotherVal secantMethod)))
-            --print $ map len $ filter isInDiap (map anotherVal secantMethod)
+            myPutStr $ show $ abs $ equation $ last  $ map anotherVal secantMethod
+            --myPutStr $ show $ map (len.anotherVal) secantMethod
 
             
