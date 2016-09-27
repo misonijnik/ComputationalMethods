@@ -1,4 +1,4 @@
-import NonlinearEquation
+import           NonlinearEquation
 
 main :: IO ()
 main = do myPutStr "Численные методы решения нелинейных уравнений."
@@ -8,7 +8,7 @@ main = do myPutStr "Численные методы решения нелине�
           putStrLn "- уравнение:"
           myPutStr "(2 - x)* exp x - 0.5"
           putStrLn "- эпсилон:"
-          myPutStr (show epsilon) 
+          myPutStr (show epsilon)
           tabSegToOutput
           bisecToOutput
           newtonToOutput
@@ -52,7 +52,7 @@ bisecHelper (segOld, (segNow, arrVal)) = do putStrLn "Начальнай отр�
                                             putStrLn "Приближенное решение:"
                                             myPutStr $ show $ last arrVal
                                             putStrLn "Разность модулей последних приближений:"
-                                            myPutStr $ show $ abs (fst segNow - snd segNow)
+                                            myPutStr $ show $ abs (uncurry (-) segNow)
                                             putStrLn "Абсолютная величина невязки:"
                                             myPutStr $ show $ abs (equation $ last arrVal)
 
@@ -66,7 +66,7 @@ newtonHelper (seg, arrVal) = do putStrLn "Начальнай отрезок:"
                                 putStrLn "Приближенное решение:"
                                 myPutStr $ show $ last arrVal
                                 putStrLn "Разность модулей последних приближений:"
-                                myPutStr $ show $ abs (last arrVal - (last $ init arrVal))
+                                myPutStr $ show $ abs (last arrVal - last (init arrVal))
                                 putStrLn "Абсолютная величина невязки:"
                                 myPutStr $ show $ abs (equation $ last arrVal)
 
@@ -74,13 +74,13 @@ secantHelper :: (Segment, [Value]) -> IO ()
 secantHelper (seg, arrVal) = do putStrLn "Начальнай отрезок:"
                                 myPutStr $ show seg
                                 putStrLn "Начальное приближение:"
-                                myPutStr $ show $ seg
+                                myPutStr $ show seg
                                 putStrLn "Количество шагов для достижения точности эпсилон:"
                                 myPutStr $ show $ length arrVal
                                 putStrLn "Приближенное решение:"
                                 myPutStr $ show $ last arrVal
                                 putStrLn "Разность модулей последних приближений:"
-                                myPutStr $ show $ abs (last arrVal - (last $ init arrVal))
+                                myPutStr $ show $ abs (last arrVal - last (init arrVal))
                                 putStrLn "Абсолютная величина невязки:"
                                 myPutStr $ show $ abs (equation $ last arrVal)
 
@@ -110,4 +110,4 @@ getVal = do putStr "Метод половинного деления."
             myPutStr $ show $ abs $ equation $ last  $ map anotherVal secantMethod
             --myPutStr $ show $ map (len.anotherVal) secantMethod
 
-            
+

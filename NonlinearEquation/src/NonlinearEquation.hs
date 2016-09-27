@@ -69,6 +69,7 @@ bisection eps (a,b)
     | isRoot (a, c)          = Writer ((a,c), [c]) >>= bisection eps
     | isRoot (c, b)          = Writer ((c,b), [c]) >>= bisection eps
     where c = (a + b)/2
+bisection _ (_, _) = error "Случилось что-то невероятное."
 
 newtonApproximation ::  Value -> Value
 newtonApproximation x = x - equation x/diffEquation x
