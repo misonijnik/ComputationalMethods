@@ -11,7 +11,7 @@ main = do
   putStrLn "Интерполяционный многочлен в форме Лагранжа"
   putStrLn "Введите границы отрезка в форме: (a, b)"
   segment <- readASegment
-  putStrLn "Введите число узлов в таблице"
+  putStrLn "Введите число m"
   number <- readAInt
   putStrLn "Функция в табличной форме:"
   let tableFoo = table segment number
