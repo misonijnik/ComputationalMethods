@@ -12,12 +12,6 @@ type Epsilon = Double
 type Node = (Value, Value)
 type ValueFunc = (Value -> Value)
 
-diap :: Segment
-diap = (0, 1.5)
-
-numberOfValues :: Int
-numberOfValues = 15
-
 toDouble :: Int -> Double
 toDouble x = fromInteger $ toInteger x
 
@@ -34,5 +28,5 @@ deleteByIndex xs n = ys ++ (tail zs)
     where (ys, zs) = splitAt n xs
 
 
-table :: [Node]
-table = funcToTable demoFunc (divisionIntoUnits numberOfValues diap)
+table :: Segment -> Int -> [Node]
+table seg n = funcToTable demoFunc (divisionIntoUnits n seg)
