@@ -1,9 +1,9 @@
-module Reader where 
+module Reader where
 
-import           Control.Applicative()
-import           Control.Monad()
-import           Data.Functor()
-import           Data.Monoid()
+import           Control.Applicative ()
+import           Control.Monad       ()
+import           Data.Functor        ()
+import           Data.Monoid         ()
 
 data Reader env a = Reader (env -> a)
 

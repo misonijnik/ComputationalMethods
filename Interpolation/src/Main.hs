@@ -42,7 +42,7 @@ readPower n = do
     if (powerN > n) || (powerN < 0)
         then do
             putStrLn "Ошибка. Введите верную степень"
-            return readPower n
+            readPower n
         else return powerN
 
 inputVal :: Segment -> Int -> IO ()
