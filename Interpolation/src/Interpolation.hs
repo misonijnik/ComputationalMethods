@@ -45,10 +45,10 @@ lagrangePolynom listNode n = foldl1 sumFunc listTmpPolynom
           listLagrangePolynomK = map (lagrangePolynomK (listMonomial' cutListNode)) listNum
           listTmpPolynom = zipWith mulFunc (map (const . snd) cutListNode) listLagrangePolynomK
 
-differences :: [(Node, Value)] -> [(Node, Value)]
-differences [] = []
-differences [_] = []
-differences (a : values) = ((firstX, lastX),(lastY - firstY)/(lastX - firstX)) : differences values
+sDifferences :: [(Node, Value)] -> [(Node, Value)]
+sDifferences [] = []
+sDifferences [_] = []
+sDifferences (a : values) = ((firstX, lastX),(lastY - firstY)/(lastX - firstX)) : sDifferences values
     where ((firstX, _), firstY) = a
           ((_, lastX), lastY) = head values
 
@@ -60,7 +60,7 @@ splitDifferences' values n = map (map snd) (splitDifferences nodesV n)
 splitDifferences :: [(Node, Value)] -> Int -> [[(Node, Value)]]
 splitDifferences _ 0 = []
 splitDifferences values n = nextDifferences : splitDifferences nextDifferences (n - 1)
-    where nextDifferences = differences values
+    where nextDifferences = sDifferences values
 
 newtonOmegaListFrom' :: [Node] -> [ValueFunc]
 newtonOmegaListFrom' listNode = reverse . newtonOmegaListFrom $ values
