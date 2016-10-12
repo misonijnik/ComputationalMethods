@@ -52,14 +52,14 @@ differences (a : values) = ((firstX, lastX),(lastY - firstY)/(lastX - firstX)) :
     where ((firstX, _), firstY) = a
           ((_, lastX), lastY) = head values
 
-finiteDifferences' :: [Node] -> Int -> [[Value]]
-finiteDifferences' values n = map (map snd) (finiteDifferences nodesV n)
+splitDifferences' :: [Node] -> Int -> [[Value]]
+splitDifferences' values n = map (map snd) (splitDifferences nodesV n)
     where nodesV = map f values
           f (a, b) = ((a, a), b)
 
-finiteDifferences :: [(Node, Value)] -> Int -> [[(Node, Value)]]
-finiteDifferences _ 0 = []
-finiteDifferences values n = nextDifferences : finiteDifferences nextDifferences (n - 1)
+splitDifferences :: [(Node, Value)] -> Int -> [[(Node, Value)]]
+splitDifferences _ 0 = []
+splitDifferences values n = nextDifferences : splitDifferences nextDifferences (n - 1)
     where nextDifferences = differences values
 
 newtonOmegaListFrom' :: [Node] -> [ValueFunc]
@@ -74,7 +74,7 @@ newtonOmegaListFrom values = omegaFrom (listMonomial initValues) : newtonOmegaLi
 newtonPolynom :: [Node] -> Int -> ValueFunc
 newtonPolynom listNode n = sumFunc (const $ snd.head $ cutListNode) (foldl1 sumFunc listTmpPolynom)
     where cutListNode = take (n+1) listNode
-          finiteDiff = finiteDifferences' cutListNode n
+          finiteDiff = splitDifferences' cutListNode n
           finiteDiff' = map head finiteDiff
           newtonOmega = newtonOmegaListFrom' cutListNode
           listTmpPolynom = zipWith mulFunc newtonOmega (map const finiteDiff')
