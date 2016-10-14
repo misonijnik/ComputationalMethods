@@ -52,29 +52,29 @@ sDifferences (a : values) = ((firstX, lastX),(lastY - firstY)/(lastX - firstX)) 
     where ((firstX, _), firstY) = a
           ((_, lastX), lastY) = head values
 
-splitDifferences' :: [Node] -> Int -> [[Value]]
-splitDifferences' values n = map (map snd) (splitDifferences nodesV n)
-    where nodesV = map f values
+splitDifferences :: [Node] -> Int -> [[Value]]
+splitDifferences nodes n = map snd nodes : map (map snd) (splitDifferences' nodesV n)
+    where nodesV = map f nodes
           f (a, b) = ((a, a), b)
 
-splitDifferences :: [(Node, Value)] -> Int -> [[(Node, Value)]]
-splitDifferences _ 0 = []
-splitDifferences values n = nextDifferences : splitDifferences nextDifferences (n - 1)
+splitDifferences' :: [(Node, Value)] -> Int -> [[(Node, Value)]]
+splitDifferences' _ 0 = []
+splitDifferences' values n = nextDifferences : splitDifferences' nextDifferences (n - 1)
     where nextDifferences = sDifferences values
 
-newtonOmegaListFrom' :: [Node] -> [ValueFunc]
-newtonOmegaListFrom' listNode = reverse . newtonOmegaListFrom $ values
-    where values = map fst listNode
+newtonOmegaListFrom :: [Node] -> [ValueFunc]
+newtonOmegaListFrom nodes = const 1 : (reverse . newtonOmegaListFrom' $ values)
+    where values = map fst nodes
 
-newtonOmegaListFrom :: [Value] -> [ValueFunc]
-newtonOmegaListFrom [_] = []
-newtonOmegaListFrom values = omegaFrom (listMonomial initValues) : newtonOmegaListFrom initValues
+newtonOmegaListFrom' :: [Value] -> [ValueFunc]
+newtonOmegaListFrom' [_] = []
+newtonOmegaListFrom' values = omegaFrom (listMonomial initValues) : newtonOmegaListFrom' initValues
     where initValues = init values
 
 newtonPolynom :: [Node] -> Int -> ValueFunc
-newtonPolynom listNode n = sumFunc (const $ snd.head $ cutListNode) (foldl1 sumFunc listTmpPolynom)
-    where cutListNode = take (n+1) listNode
-          finiteDiff = splitDifferences' cutListNode n
+newtonPolynom nodes n = foldl1 sumFunc listTmpPolynom
+    where cutListNode = take (n+1) nodes
+          finiteDiff = splitDifferences cutListNode n
           finiteDiff' = map head finiteDiff
-          newtonOmega = newtonOmegaListFrom' cutListNode
+          newtonOmega = newtonOmegaListFrom cutListNode
           listTmpPolynom = zipWith mulFunc newtonOmega (map const finiteDiff')

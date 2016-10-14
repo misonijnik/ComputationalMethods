@@ -1,8 +1,10 @@
 module InterpolationWithoutDivision where
 
-import           Prelude
-import           Data.List
+import           Data.List         ()
 import           FuncToTableHelper
+import           Prelude
+
+data InterOpt = Head | Middle Int | Tail
 
 monomialFrom :: Value -> ValueFunc
 monomialFrom xj x = x - xj
@@ -28,36 +30,55 @@ fDifferences [_] = []
 fDifferences (a : values) = (a' -a) : fDifferences values
     where a' = head values
 
-finiteDifferences' :: [Node] -> Int -> [[Value]]
-finiteDifferences' nodes = finiteDifferences values
+finiteDifferences :: [Node] -> Int -> [[Value]]
+finiteDifferences nodes n = values : finiteDifferences' values n
     where values = map snd nodes
 
-finiteDifferences :: [Value] -> Int -> [[Value]]
-finiteDifferences _ 0 = []
-finiteDifferences values n = nextDifferences : finiteDifferences nextDifferences (n - 1)
+finiteDifferences' :: [Value] -> Int -> [[Value]]
+finiteDifferences' _ 0 = []
+finiteDifferences' values n = nextDifferences : finiteDifferences' nextDifferences (n - 1)
     where nextDifferences = fDifferences values
-{-
-    newtonOmegaWDListFrom' :: [Node] -> [ValueFunc]
-    newtonOmegaWDListFrom' listNode = reverse . newtonOmegaWDListFrom $ values
-        where values = map fst listNode
 
-    newtonOmegaWDListFrom :: [Value] -> [ValueFunc]
-    newtonOmegaWDListFrom [_] = []
-    newtonOmegaWDListFrom values = omegaFrom (listMonomial initValues) : newtonOmegaWDListFrom initValues
-        where initValues = init values
+newtonWDListFrom :: [Value] -> Int -> [ValueFunc]
+newtonWDListFrom values n= const 1 : (reverse . newtonWDListFrom' $ cutValues)
+    where cutValues = take n values
+
+newtonWDListFrom' :: [Value]-> [ValueFunc]
+newtonWDListFrom' [_] = []
+newtonWDListFrom' values = omegaFrom (listMonomial initValues) : newtonWDListFrom' initValues
+    where initValues = init values
+
+getInterOpt :: [Node] -> Value -> InterOpt
+getInterOpt nodes x
+    | x < a     = Head
+    | x > b     = Tail
+    | otherwise = Middle (number - 1)
+    where values = map snd nodes
+          (a, b) = (head . tail $ values, last . init $ values)
+          number =   length . fst $ span (< x) values
+
+newtonPolynomWD :: [Node] -> Int -> ValueFunc
+newtonPolynomWD nodes n x = case interOpt of
+    Head         -> newtonPolynomWD' (newtonOmega indexMonomialHead) (map head finiteDiff) x
+    Tail         -> newtonPolynomWD' (newtonOmega indexMonomialTail) (map last finiteDiff) x
+    Middle count -> newtonPolynomWD' (newtonOmega indexMonomialMiddle) (zipWith (changeIndex count) finiteDiff indexFinite) x
+    where interOpt = getInterOpt  nodes x
+          newtonOmega indexMonomial = newtonWDListFrom indexMonomial n
+          finiteDiff = finiteDifferences nodes n
+          indexFinite = take (n + 1) indexFiniteWD
 
 
-    newtonPolynomWD :: [Node] -> Int -> ValueFunc
-    newtonPolynomWD listNode n = sumFunc (const $ snd.head $ cutListNode) (foldl1 sumFunc listTmpPolynom)
-        where cutListNode = take (n+1) listNode
-            finiteDiff = finiteDifferences' cutListNode n
-            finiteDiff' = map head finiteDiff
-            newtonOmegaWD = newtonOmegaWDListFrom' cutListNode
-            listTmpPolynom = zipWith mulFunc newtonOmegaWD (map const finiteDiff')
--}
+newtonPolynomWD' :: [ValueFunc] -> [Value] -> ValueFunc
+newtonPolynomWD' newtonOmega finiteDiff = foldl1 sumFunc $ zipWith mulFunc newtonOmega (map const finiteDiff)
 
 indexFiniteWD :: [Int]
 indexFiniteWD = [- truncate (toDouble x / 2) | x <- [0 .. ]]
 
-indexMonomialWD :: [Int]
-indexMonomialWD = [(-1) ^ x * truncate (toDouble x / 2) | x <- [0 .. ]]
+indexMonomialMiddle :: [Value]
+indexMonomialMiddle = [(-1) ^ x * toDouble (truncate (toDouble x / 2)) | x <- [0 .. ]]
+
+indexMonomialHead :: [Value]
+indexMonomialHead = [0 .. ]
+
+indexMonomialTail :: [Value]
+indexMonomialTail = [0, -1 .. ]
