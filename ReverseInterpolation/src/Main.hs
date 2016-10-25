@@ -2,6 +2,9 @@ module Main where
 
 import           FuncToTableHelper
 import           Interpolation
+import           ReverseInterpolation
+import           Writer
+import qualified NonlinearEquation as N
 import           Data.Tuple
 
 main :: IO ()
@@ -50,10 +53,32 @@ inputVal seg n = do
     putStrLn $ "Введите степень интерполяционного многочлена меньше либо равную " ++ show n
     powerN <- readPower n
     let tableFoo = table seg n
+    putStrLn "Метод №1"
     let tableVal = map swap tableFoo
-    let tableSort = sortByMinDistance pointY tableVal
+    let tableValSort = sortByMinDistance pointY tableVal
     putStrLn "Значение аргумента:"
-    let polynomL = lagrangePolynom tableSort powerN
-    print $ polynomL pointY
+    let polynomVal = lagrangePolynom tableValSort powerN
+    print $ polynomVal pointY
     putStrLn "Модуль невязки"
-    print $ abs (demoFunc (polynomL pointY) - pointY)
+    print $ abs (demoFunc (polynomVal pointY) - pointY)
+    putStrLn "Метод №2"
+    let segments = getListOfSeg tableFoo pointY
+    let values = map (\(a, b) -> (a + b) / 2) segments
+    let flipSort = flip sortByMinDistance
+    let sortedTables = map (flipSort tableFoo) values
+    let flipPolynom = flip lagrangePolynom
+    let polynoms = map (flipPolynom powerN) sortedTables
+    let listOfFunc = map (sumFunc  (const $ - pointY)) polynoms
+    let eps = 10 ** (-8)
+    let newBisection = megaFunc eps
+    let segAndF = zip segments listOfFunc
+    let arrVal = map newBisection segAndF
+    putStrLn "Значения аргумента:"
+    mapM_ print arrVal
+    putStrLn "Модули невязки"
+    let newFunc x = abs (sumFunc demoFunc (const (-pointY)) x)
+    let arrMod = map newFunc arrVal
+    mapM_ print arrMod
+
+megaFunc :: Epsilon -> (Segment, ValueFunc) -> Value
+megaFunc eps (seg, f) = last . snd $ runWriter $ N.bisection eps (N.isRoot' f) seg
