@@ -55,12 +55,17 @@ inputVal seg n = do
     let tableSort = sortByMinDistance pointX tableFoo
     putStrLn "Отсортированная таблица:"
     mapM_ print tableSort
-    putStrLn $ "Значение интерполяционного многочлена в точке " ++ show pointX
-    let polynom = lagrangePolynom tableSort powerN
-    print $ polynom pointX
-    putStrLn $ "Разница значений функции и интерполяционного многочлена в точке " ++ show pointX
-    print $ abs (polynom pointX - demoFunc pointX)
-    graph polynom
+    putStrLn $ "Значение интерполяционного многочлена в форме Ньютона в точке " ++ show pointX
+    let polynomN = newtonPolynom tableSort powerN
+    print $ polynomN pointX
+    putStrLn $ "Разница значений функции и интерполяционного многочлена в форме Ньютона в точке " ++ show pointX
+    print $ abs (polynomN pointX - demoFunc pointX)
+    putStrLn $ "Значение интерполяционного многочлена в форме Лагранжа в точке " ++ show pointX
+    let polynomL = lagrangePolynom tableSort powerN
+    print $ polynomL pointX
+    putStrLn $ "Разница значений функции и интерполяционного многочлена в форме Лагранжа в точке " ++ show pointX
+    print $ abs (polynomL pointX - demoFunc pointX)
+    graph polynomL
 
 graph :: ValueFunc -> IO ()
 graph func = toFile def "graph.png" $ do

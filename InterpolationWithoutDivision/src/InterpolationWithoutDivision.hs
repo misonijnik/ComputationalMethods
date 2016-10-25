@@ -50,35 +50,36 @@ newtonWDListFrom' values = omegaFrom (listMonomial initValues) : newtonWDListFro
 
 getInterOpt :: [Node] -> Value -> InterOpt
 getInterOpt nodes x
-    | x < a     = Head
-    | x > b     = Tail
+    | x <= a     = Head
+    | x >= b     = Tail
     | otherwise = Middle (number - 1)
     where values = map fst nodes
           (a, b) = (head . tail $ values, last . init $ values)
-          number = length . fst $ span (<= x) values
+          number = length  $ filter (<= x) values
 
 newtonPolynomWD :: [Node] -> Int -> ValueFunc
 newtonPolynomWD nodes n x = case interOpt of
-    Head         -> newtonPolynomWD' (newtonOmega indexMonomialHead) (map head finiteDiff) (x - a) / h
-    Tail         -> newtonPolynomWD' (newtonOmega indexMonomialTail) (map last finiteDiff) (x - b) / h
-    Middle count -> newtonPolynomWD' (newtonOmega indexMonomialMiddle) (zipWith (changeIndex count) finiteDiff indexFinite) (x - z count) / h
+    Head         -> newtonPolynomWD' (newtonOmega indexMonomialHead) (map head finiteDiff) (changeTerm a)
+    Tail         -> newtonPolynomWD' (newtonOmega indexMonomialTail) (map last finiteDiff) (changeTerm b)
+    Middle count -> newtonPolynomWD' (newtonOmega indexMonomialMiddle) (zipWith (changeIndex count) finiteDiff indexFinite) (changeTerm $ getVal count)
     where interOpt = getInterOpt nodes x
           newtonOmega indexMonomial = newtonWDListFrom indexMonomial n
           finiteDiff = finiteDifferences nodes n
           indexFinite = take (n + 1) indexFiniteWD
           (a, b) = (fst . head $ nodes, fst . last $ nodes)
           h = abs ((b - a) / toDouble (length nodes - 1))
-          z index = fst $ nodes !! index
+          getVal index = fst $ nodes !! index
+          changeTerm t = (x - t) / h
 
 newtonPolynomWD' :: [ValueFunc] -> [Value] -> ValueFunc
 newtonPolynomWD' newtonOmega finiteDiff = foldl1 sumFunc $ zipWith mulFunc newtonOmega (map const finiteDiff')
     where finiteDiff' = zipWith (/) finiteDiff (1.0 : scanl1 (*) [1.0 .. toDouble (length finiteDiff - 1)]) 
 
 indexFiniteWD :: [Int]
-indexFiniteWD = [- truncate (toDouble x / 2) | x <- [0 .. ]]
+indexFiniteWD = [- floor (toDouble x / 2) | x <- [0 .. ]]
 
 indexMonomialMiddle :: [Value]
-indexMonomialMiddle = [(-1) ^ (x + 1) * toDouble (truncate (toDouble x / 2)) | x <- [0 .. ]]
+indexMonomialMiddle = [(-1) ^ x * toDouble (floor (toDouble x / 2)) | x <- [1 .. ]]
 
 indexMonomialHead :: [Value]
 indexMonomialHead = [0 .. ]

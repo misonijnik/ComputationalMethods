@@ -3,9 +3,9 @@ module FuncToTableHelper where
 import           Prelude
 
 demoFunc :: ValueFunc
---demoFunc x = 1/(1 + 25*x**2)
+demoFunc x = x**2 / (1 + x**2)
 --demoFunc x = 1 - exp(-x) + x ** 2
-demoFunc x = x ** 2
+--demoFunc x = x ** 2
 
 type Value = Double
 type Segment = (Double, Double)
