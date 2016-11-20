@@ -109,5 +109,3 @@ getVal = do putStr "Метод половинного деления."
             putStrLn "Абсолютная величина невязки:"
             myPutStr $ show $ abs $ equation $ last  $ map anotherVal secantMethod
             --myPutStr $ show $ map (len.anotherVal) secantMethod
-
-
