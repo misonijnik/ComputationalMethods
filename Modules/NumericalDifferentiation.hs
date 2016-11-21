@@ -50,7 +50,7 @@ differentiation2 _ Tail       _         = 0 / 0
 differentiation2 h (Middle _) (a, b, c) = (c - 2*b + a)/(h*h)
 
 megaDifferentiation :: [Node] -> [[Value]]
-megaDifferentiation nodes = (valX : valY : diff : diffR : diff2 : diff2R : [])
+megaDifferentiation nodes = transpose ([valX, valY, diff, diffR, diff2, diff2R])
     where (valX, valY) = (map fst nodes, map snd nodes)
           diff = differentiationFromNodes nodes
           diffReal = map demoFuncD valX

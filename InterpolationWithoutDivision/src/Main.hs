@@ -5,15 +5,15 @@ import           InterpolationWithoutDivision
 
 main :: IO ()
 main = do
-  putStrLn "Задача интерполирования по равноотстоящим узлам"
-  putStrLn "Введите границы отрезка в форме: (a, b)"
-  segment <- readASegment
-  putStrLn "Введите число m"
-  number <- readAInt
-  putStrLn "Функция в табличной форме:"
-  let tableFoo = table segment number
-  mapM_ print tableFoo
-  nextWork segment number
+    putStrLn "Задача интерполирования по равноотстоящим узлам"
+    putStrLn "Введите границы отрезка в форме: (a, b)"
+    segment <- readASegment
+    putStrLn "Введите число m"
+    number <- readAInt
+    putStrLn "Функция в табличной форме:"
+    let tableFoo = table segment number
+    mapM_ print tableFoo
+    nextWork segment number
 
 readAInt :: IO Int
 readAInt = readLn
