@@ -2,11 +2,9 @@ module NonlinearEquation where
 
 import           Prelude
 import           Writer
+import           Helper
 
-type Segment = (Double, Double)
 data Methods = Bisection | Newton deriving (Eq, Show)
-type Epsilon = Double
-type Value   = Double
 
 equation :: Value -> Value
 equation x = 4 * p * radius ** 3 - 3 * radius * x ** 2 + x ** 3
@@ -45,7 +43,7 @@ step = 0.01
 epsilon :: Epsilon
 epsilon = 10**(-8)
 
-isRoot' :: (Value -> Value) -> Segment -> Bool
+isRoot' :: (Value-> Value) -> Segment -> Bool
 isRoot' eq (x, y) = (eq x * eq y) <= 0
 
 isRoot :: Segment -> Bool

@@ -1,4 +1,5 @@
 import           NonlinearEquation
+import           Helper
 
 main :: IO ()
 main = do myPutStr "Численные методы решения нелинейных уравнений."
