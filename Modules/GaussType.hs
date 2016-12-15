@@ -13,6 +13,9 @@ fFunc = sin
 wFunc :: ValueFunc
 wFunc x = 1 / (x + 0.1)
 
+psiFunc :: ValueFunc
+psiFunc x = sin x / (x + 0.1)
+
 iSegment :: Segment
 iSegment = (0, 1)
 
@@ -54,7 +57,7 @@ getIntegral func nodes coeff = sum $ zipWith (*) (map func nodes) coeff
 
 result :: ValueFunc -> Value
 result func = integral where
-    moments = getMoments iSegment 4
+    moments = getMoments iSegment 3
     matrix = getMatrix moments
     coeff = getCoefficient matrix
     polynomial = getPolynomial coeff
@@ -75,6 +78,14 @@ derivativePolynomialLegendre :: Int -> ValueFunc
 derivativePolynomialLegendre nInt = \x -> n / (1 - x**2) * (polynomialLegendre (nInt - 1) x - x * polynomialLegendre nInt x) where
     n = toDouble nInt
 
-getCoefficientLegendre :: Int -> ValueFunc
-getCoefficientLegendre k x = 2 / ((1 - x**2) * derivative x ** 2) where
+getCoefficientLegendre :: [Value] -> [Value]
+getCoefficientLegendre nodes = map coeff nodes where
+    k = length nodes
     derivative = derivativePolynomialLegendre k
+    coeff x = 2 / ((1 - x**2) * derivative x ** 2)
+
+getIntegralLegendre :: ValueFunc -> Segment -> [Value] -> [Value] -> Value
+getIntegralLegendre func seg nodes coeff = (b - a) / 2 * res where
+    (a, b) = seg
+    f x = (b - a) / 2 * x + (b + a) / 2
+    res = sum $ zipWith (*) (map (func . f) nodes) coeff

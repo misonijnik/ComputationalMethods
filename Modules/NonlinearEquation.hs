@@ -41,7 +41,7 @@ step :: Epsilon
 step = 0.01
 
 epsilon :: Epsilon
-epsilon = 10**(-8)
+epsilon = 10**(-15)
 
 isRoot' :: (Value-> Value) -> Segment -> Bool
 isRoot' eq (x, y) = (eq x * eq y) <= 0
