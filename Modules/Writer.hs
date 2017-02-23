@@ -1,9 +1,9 @@
-module Writer where 
+module Writer where
 
-import           Control.Applicative()
-import           Control.Monad()
-import           Data.Functor()
-import           Data.Monoid()
+import           Control.Applicative ()
+import           Control.Monad       ()
+import           Data.Functor        ()
+import           Data.Monoid         ()
 
 data Writer w a = Writer (a, w)
 
@@ -11,7 +11,7 @@ runWriter :: Writer w a -> (a, w)
 runWriter (Writer a) = a
 
 execWriter :: Writer w a -> w
-execWriter p = snd $ runWriter p 
+execWriter p = snd $ runWriter p
 
 instance Functor (Writer w) where
     fmap f (Writer a) = Writer (f $ fst a, snd a)

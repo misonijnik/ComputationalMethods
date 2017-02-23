@@ -73,7 +73,7 @@ newtonPolynomWD nodes n x = case interOpt of
 
 newtonPolynomWD' :: [ValueFunc] -> [Value] -> ValueFunc
 newtonPolynomWD' newtonOmega finiteDiff = foldl1 sumFunc $ zipWith mulFunc newtonOmega (map const finiteDiff')
-    where finiteDiff' = zipWith (/) finiteDiff (1.0 : scanl1 (*) [1.0 .. toDouble (length finiteDiff - 1)]) 
+    where finiteDiff' = zipWith (/) finiteDiff (1.0 : scanl1 (*) [1.0 .. toDouble (length finiteDiff - 1)])
 
 indexFiniteWD :: [Int]
 indexFiniteWD = [- floor (toDouble x / 2) | x <- [0 .. ]]

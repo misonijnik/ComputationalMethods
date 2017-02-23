@@ -1,20 +1,20 @@
 module NonlinearEquation where
 
+import           Helper
 import           Prelude
 import           Writer
-import           Helper
 
 data Methods = Bisection | Newton deriving (Eq, Show)
 
 equation :: Value -> Value
-equation x = 4 * p * radius ** 3 - 3 * radius * x ** 2 + x ** 3
+--equation x = 4 * p * radius ** 3 - 3 * radius * x ** 2 + x ** 3
 --equation x = x ** 4 - 16 * x ** 3 + 500 * x ** 2 - 8000 * x + 32000
---equation x = (2 - x)* exp x - 0.5
+equation x = (2 - x)* exp x - 0.5
 
 diffEquation :: Value -> Value
-diffEquation x = - 6 * radius * x + 3 * x ** 2
+--diffEquation x = - 6 * radius * x + 3 * x ** 2
 --diffEquation x = 4 * x ** 3 - 48 * x ** 2 + 1000 * x - 8000
---diffEquation x = exp x - x * exp x 
+diffEquation x = exp x - x * exp x
 
 
 
@@ -41,7 +41,7 @@ step :: Epsilon
 step = 0.01
 
 epsilon :: Epsilon
-epsilon = 10**(-15)
+epsilon = 10**(-8)
 
 isRoot' :: (Value-> Value) -> Segment -> Bool
 isRoot' eq (x, y) = (eq x * eq y) <= 0
@@ -111,5 +111,3 @@ newtonModifyMethod = zip tabulatedSegments $ map (\val -> newtonModify (diffEqua
 
 secantMethod :: [(Segment, [Double])]
 secantMethod = zip tabulatedSegments $ map (secant epsilon) tabulatedSegments
-
-

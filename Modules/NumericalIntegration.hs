@@ -1,6 +1,6 @@
 module NumericalIntegration where
 
-import FuncToTableHelper
+import           FuncToTableHelper
 
 data IntegrationType = MediumRectangle | Trapeze | Simpson
     deriving Eq
@@ -21,16 +21,16 @@ mediumRectangle f a b = (b - a) * f ((a + b) / 2)
 
 trapeze :: ValueFunc -> Value -> Value -> Value
 trapeze f a b = c * (f a + f b)
-    where c = (b - a) / 2 
+    where c = (b - a) / 2
 
 simpson :: ValueFunc -> Value -> Value -> Value
 simpson f a b = (*) c $ f a + 4 * f ((a + b )/ 2) + f b
     where c = (b - a) / 6
 
 convolution :: (Value -> Value -> Value) -> [Value] -> Value
-convolution _ [] = 0
-convolution _ [_] = 0
-convolution f [x, y] = f x y
+convolution _ []             = 0
+convolution _ [_]            = 0
+convolution f [x, y]         = f x y
 convolution f (x : y : list) = f x y + convolution f (y : list)
 
 integration :: ValueFunc -> Segment -> Int -> IntegrationType-> Value
@@ -39,4 +39,4 @@ integration f seg m t | t == MediumRectangle = res mediumRectangle
                       | t == Simpson         = res simpson
                       | otherwise            = error "Emm..."
     where values     = divisionIntoUnits m seg
-          res method = convolution (method f) values 
+          res method = convolution (method f) values

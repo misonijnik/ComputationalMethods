@@ -1,6 +1,6 @@
 module ReverseInterpolation where
 
-import FuncToTableHelper
+import           FuncToTableHelper
 
 getListOfSeg :: [Node] -> Value -> [Segment]
 getListOfSeg [] _ = []

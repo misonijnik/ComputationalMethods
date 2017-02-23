@@ -1,7 +1,7 @@
 module Main where
 
-import GaussType
-import Helper
+import           GaussType
+import           Helper
 
 main :: IO ()
 main = do
@@ -40,10 +40,10 @@ main = do
 
 showPolynomial :: [Value] -> String
 showPolynomial = getStrPolynomial where
-    getStrPolynomial pol | len == 0  = [] 
+    getStrPolynomial pol | len == 0  = []
                          | len == 1  = "(" ++ show x ++ ")"
-                         | otherwise = "(" ++ show x ++ ")" ++ "x^" ++ show power ++ " + " ++ getStrPolynomial nextPol 
-        where 
+                         | otherwise = "(" ++ show x ++ ")" ++ "x^" ++ show power ++ " + " ++ getStrPolynomial nextPol
+        where
             len = length pol
             power = length nextPol
             (x : nextPol) = pol
