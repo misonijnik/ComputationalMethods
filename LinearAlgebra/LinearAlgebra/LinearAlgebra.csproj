@@ -40,12 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Check.cs" />
-    <Compile Include="Vectors\ICreator.cs" />
+    <Compile Include="Helpers\Check.cs" />
+    <Compile Include="Helpers\ICreator.cs" />
+    <Compile Include="Matrix\Matrix.cs" />
     <Compile Include="Vectors\Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Vectors\VectorImmutable.cs" />
-    <Compile Include="Vectors\VectorMutable.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

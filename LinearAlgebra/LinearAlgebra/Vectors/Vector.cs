@@ -5,26 +5,46 @@ using System.Linq;
 using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
+using LinearAlgebra.Helpers;
 
 namespace LinearAlgebra.Vectors
 {
-    public abstract class Vector
+    public class Vector
     {
-        protected readonly double[] vector;
-        public readonly int Dimension;
-
-        protected Vector(double[] values)
+        private readonly double[] _vector;
+        public int Dimension
         {
-            vector = values.Clone() as double[];
-            Dimension = vector.Length;
+            get;
+        }
+
+        private Vector(double[] values)
+        {
+            _vector = values.Clone() as double[];
+            Dimension = _vector.Length;
+        }
+
+        public double this[int index]
+        {
+            set
+            {
+                Check.InDiapason(index, $"Index must be greater than zero and less than or equal {Dimension}",
+                    1, Dimension);
+                _vector[index - 1] = value;
+            }
+
+            get
+            {
+                Check.InDiapason(index, $"Index must be greater than zero and less than or equal {Dimension}",
+                    1, Dimension);
+                return _vector[index - 1];
+            }
         }
 
         /// <typeparam name="T"></typeparam>
         /// <param name="values">
         /// Must not be empty.
         /// </param>
-        public static VectorMutable CreateMutable<T>(T values)
-            where T : IEnumerable<double>
+        public static Vector Create(IEnumerable<double> values)
         {
             Check.NotNull(values);
 
@@ -33,24 +53,7 @@ namespace LinearAlgebra.Vectors
                 throw new ArgumentException("The sequence must not be empty.");
             }
 
-            return new VectorMutable(values.ToArray());
-        }
-
-        /// <typeparam name="T"></typeparam>
-        /// <param name="values">
-        /// Must not be empty.
-        /// </param>
-        public static VectorImmutable CreateImmutable<T>(T values)
-            where T : IEnumerable<double>
-        {
-            Check.NotNull(values);
-
-            if (values.Count().Equals(0))
-            {
-                throw new ArgumentException("The sequence must not be empty.");
-            }
-
-            return new VectorImmutable(values.ToArray());
+            return new Vector(values.ToArray());
         }
 
         /// <summary>
@@ -59,34 +62,74 @@ namespace LinearAlgebra.Vectors
         /// <param name="dimension">
         /// Must be greater than zero.
         /// </param>
-        public static VectorMutable CreateMutableZero(int dimension)
+        public static Vector CreateZero(int dimension)
         {
             Check.NaturalNumber(dimension, "Dimension must be greater than zero.");
-            return new VectorMutable(new double[dimension]);
+            return new Vector(new double[dimension]);
         }
 
-        /// <summary>
-        /// Смысл таков: Ограничение на базовый класс позволяет докопаться до массива со значениями вектора
-        /// и не позволяет использовать какие-то левые типы. А ограничение на обобщенный интерфейс
-        /// такого же типа позволяет создать внутри метода класс нужного нам типа. И вуаля, всё работает.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static T Sum<T>(T left, T right)
-            where T : Vector, ICreator<T>
+        public static Vector Sum(Vector left, Vector right)
         {
             if (!left.Dimension.Equals(right.Dimension))
             {
                 throw new ArgumentException("Vectors should have the same dimension");
             }
-            return left.Create(left.vector.Zip(right.vector, (l, r) => l + r));
+            return Create(left._vector.Zip(right._vector, (l, r) => l + r));
+        }
+
+        public static Vector MultiplyOnScalar(double scalar, Vector vector)
+        {
+            return Create(vector._vector.Select(x => x * scalar));
+        }
+
+        public static Vector Subtraction(Vector left, Vector right)
+        {
+            return Sum(left, MultiplyOnScalar(-1, right));
+        }
+
+        public static double ScalarProduct(Vector left, Vector right)
+        {
+            return left._vector.Zip(right._vector, (l, r) => l * r).Sum();
+        }
+
+        private int MaxNumberOfChars(IEnumerable<string> strings)
+        {
+            return strings.Select(str => str.Length).Max();
         }
 
         public override string ToString()
         {
-            return string.Join(",", vector.Select(num => num.ToString(CultureInfo.InvariantCulture)));
+            var vectorString = _vector.Select(num => num.ToString(CultureInfo.InvariantCulture));
+            int max = MaxNumberOfChars(vectorString);
+            string result = new string('-', max);
+            result += "\n" + string.Join("\n", _vector.Select(num => num.ToString(CultureInfo.InvariantCulture))) + "\n";
+            result += new string('-', max);
+            return result;
+        }
+
+        public enum NumP
+        {
+            One,
+            Two,
+            Infinity
+        }
+
+        public double Norm(NumP number)
+        {
+            double result = 0;
+            switch (number)
+            {
+                case NumP.One:
+                    result = _vector.Select(x => Math.Abs(x)).Sum();
+                    break;
+                case NumP.Two:
+                    result = Math.Sqrt(_vector.Select(x => x * x).Sum());
+                    break;
+                case NumP.Infinity:
+                    result = _vector.Select(x => Math.Abs(x)).Max();
+                    break;
+            }
+            return result;
         }
     }
 }
