@@ -17,6 +17,11 @@ namespace LinearAlgebra.Vectors
             get;
         }
 
+        public Vector Clone()
+        {
+            return Vector.Create(_vector);
+        }
+
         private Vector(double[] values)
         {
             _vector = values.Clone() as double[];
@@ -82,7 +87,7 @@ namespace LinearAlgebra.Vectors
             return Create(vector._vector.Select(x => x * scalar));
         }
 
-        public static Vector Subtraction(Vector left, Vector right)
+        public static Vector Substraction(Vector left, Vector right)
         {
             return Sum(left, MultiplyOnScalar(-1, right));
         }

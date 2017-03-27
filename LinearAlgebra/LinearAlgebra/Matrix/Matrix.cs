@@ -21,6 +21,21 @@ namespace LinearAlgebra.Matrix
             return new Matrix(values.ToArray());
         }
 
+        public static Matrix CreateIdentity(int dimension)
+        {
+            Matrix identity = Matrix.Create(new double[dimension, dimension]);
+            for (int k = 1; k <= dimension; k++)
+            {
+                identity[k, k] = 1;
+            }
+            return identity;
+        }
+
+        public Matrix Clone()
+        {
+            return Create(_matrix);
+        }
+
         private Matrix(double[] sequence)
         {
             int dimension;
@@ -93,6 +108,16 @@ namespace LinearAlgebra.Matrix
                 }
             }
             return Create(matrix);
+        }
+
+        public static Matrix Sum(Matrix left, Matrix right)
+        {
+            return Create(left._matrix.Zip(right._matrix, (x, y) => x.Zip(y, (u, v) => u + v).ToArray()).ToArray());
+        }
+
+        public static Matrix Substraction(Matrix left, Matrix right)
+        {
+            return Sum(left, MultiplyOnScalar(-1, right));
         }
 
         public static Matrix MultiplyOnScalar(double scalar, Matrix matrix)

@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B0522430-EBF1-4EC0-B58B-ADAE3CBDD8E7}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{69B4C004-3ED4-438D-B0C2-3C2DDB93F570}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestLinearAlgebra</RootNamespace>
-    <AssemblyName>TestLinearAlgebra</AssemblyName>
+    <RootNamespace>SystemLinearEquation</RootNamespace>
+    <AssemblyName>SystemLinearEquation</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,20 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LinearAlgebra\LinearAlgebra.csproj">
       <Project>{e7b40f12-e929-431a-a4a2-2506f4a385ca}</Project>
       <Name>LinearAlgebra</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SystemLinearEquation\SystemLinearEquation.csproj">
-      <Project>{69b4c004-3ed4-438d-b0c2-3c2ddb93f570}</Project>
-      <Name>SystemLinearEquation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

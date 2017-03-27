@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Check.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\ICreator.cs" />
     <Compile Include="Matrix\Matrix.cs" />
     <Compile Include="Vectors\Vector.cs" />

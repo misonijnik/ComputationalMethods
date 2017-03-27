@@ -4,7 +4,7 @@ namespace LinearAlgebra.Helpers
 {
     public static class Check
     {
-        public static void NotNull(object obj)
+        public static void NotNull(this object obj)
         {
             if (obj == null)
             {
