@@ -134,6 +134,30 @@ namespace LinearAlgebra.Matrix
             return Vector.Create(matrix._matrix.Select(x => Vector.ScalarProduct(Vector.Create(x), vector)));
         }
 
+        public static Matrix Multiply(Matrix left, Matrix right)
+        {
+            if(left.Dimension != right.Dimension)
+            {
+                throw new ArgumentException();
+            }
+            Matrix result = CreateIdentity(left.Dimension);
+            Vector vec = Vector.CreateZero(left.Dimension);
+
+            for (int i = 1; i <= left.Dimension; i++)
+            {
+                for (int j = 1; j <= vec.Dimension; j++)
+                {
+                    vec[j] = right[j, i];
+                }
+                vec = MultiplyOnVector(left, vec);
+                for (int j = 1; j <= vec.Dimension; j++)
+                {
+                    result[j, i] = vec[j];
+                }
+            }
+            return result;
+        }
+
         public static Matrix Create(double[,] matrix)
         {
             List<double> tmp = new List<double>();

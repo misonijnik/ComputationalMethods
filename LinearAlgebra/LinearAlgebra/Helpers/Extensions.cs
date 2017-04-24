@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LinearAlgebra.Vectors;
 
 namespace LinearAlgebra.Helpers
 {
@@ -20,6 +21,19 @@ namespace LinearAlgebra.Helpers
             array.NotNull();
 
             return array.GetLength(1);
+        }
+
+        public static double MaxModule(this Vector vector)
+        {
+            double max = 0;
+            for (int i = 1; i <= vector.Dimension; i++)
+            {
+                if (Math.Abs(vector[i]) > Math.Abs(max))
+                {
+                    max = vector[i];
+                }
+            }
+            return max;
         }
     }
 }

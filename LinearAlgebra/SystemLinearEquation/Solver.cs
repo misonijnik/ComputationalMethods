@@ -13,6 +13,42 @@ namespace SystemLinearEquation
     {
         public static readonly double Epsilon = Math.Pow(10, -8);
 
+        public static Vector TridiagonalMethod(Matrix matrix, Vector vector)
+        {
+            if (matrix.Dimension != vector.Dimension && matrix.Dimension < 2)
+            {
+                throw new ArgumentException();
+            }
+            int n = vector.Dimension;
+
+            Vector m = Vector.CreateZero(n);
+            Vector k = Vector.CreateZero(n);
+
+            m[1] = -matrix[1, 2] / matrix[1, 1];
+            k[1] = vector[1] / matrix[1, 1];
+
+            for (int i = 2; i <= n; i++)
+            {
+                double a = i != 0 ? matrix[i, i - 1] : 0;
+                double b = matrix[i, i];
+                double c = i != n ? matrix[i, i + 1] : 0;
+                double d = vector[i];
+
+                double temp = a * m[i - 1] + b;
+                m[i] = -c / temp;
+                k[i] = (d - k[i - 1] * a) / temp;
+            }
+
+            Vector y = Vector.CreateZero(n);
+            y[n] = k[n];
+
+            for (int i = n - 1; i >= 1; i--)
+            {
+                y[i] = m[i] * y[i + 1] + k[i];
+            }
+            return y;
+        }
+
         public static double Determinant(Matrix oldMatrix)
         {
             Matrix matrix = oldMatrix.Clone();
