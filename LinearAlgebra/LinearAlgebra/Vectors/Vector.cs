@@ -17,6 +17,11 @@ namespace LinearAlgebra.Vectors
             get;
         }
 
+        public double[] ToArray()
+        {
+            return _vector.Clone() as double[];
+        }
+
         public Vector Clone()
         {
             return Vector.Create(_vector);

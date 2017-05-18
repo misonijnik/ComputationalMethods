@@ -41,7 +41,9 @@ namespace DifferentialEquationSolver
             matrix[n+1, n] = -betta1;
             matrix[n+1, n+1] = h * betta0 + betta1;
             vector[n+1] = h * B;
-
+            /*Console.WriteLine("Расширенная матрица:");
+            Console.WriteLine(matrix);
+            Console.WriteLine(vector);*/
             return Solver.TridiagonalMethod(matrix, vector);
         }
 
@@ -75,7 +77,9 @@ namespace DifferentialEquationSolver
             matrix[n+1, n] = -betta1 * (4 + matrix[n, n] / matrix[n, n - 1]);
             matrix[n+1, n+1] = 2 * h * betta0 + betta1 * (3 - matrix[n, n+1] / matrix[n, n - 1]);
             vector[n+1] = 2 * h * B - betta1 * (vector[n] / matrix[n, n -1]);
-
+            /*Console.WriteLine("Расширенная матрица:");
+            Console.WriteLine(matrix);
+            Console.WriteLine(vector);*/
             return Solver.TridiagonalMethod(matrix, vector);
         }
     }

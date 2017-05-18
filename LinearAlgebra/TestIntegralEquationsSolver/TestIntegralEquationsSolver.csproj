@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E7B40F12-E929-431A-A4A2-2506F4A385CA}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{939FA596-87D3-4974-9FD3-FF061BCB9E4B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LinearAlgebra</RootNamespace>
-    <AssemblyName>LinearAlgebra</AssemblyName>
+    <RootNamespace>TestIntegralEquationsSolver</RootNamespace>
+    <AssemblyName>TestIntegralEquationsSolver</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,15 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Check.cs" />
-    <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="Helpers\ICreator.cs" />
-    <Compile Include="Helpers\MathHelper.cs" />
-    <Compile Include="Matrix\Matrix.cs" />
-    <Compile Include="Vectors\Vector.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Itegral\Integral.csproj">
+      <Project>{be2d5aca-873f-4164-9043-66641ed566fb}</Project>
+      <Name>Integral</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinearAlgebra\LinearAlgebra.csproj">
+      <Project>{e7b40f12-e929-431a-a4a2-2506f4a385ca}</Project>
+      <Name>LinearAlgebra</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

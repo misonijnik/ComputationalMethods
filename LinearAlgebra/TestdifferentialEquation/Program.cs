@@ -15,7 +15,7 @@ namespace TestdifferentialEquation
 
         public static void Main(string[] args)
         {
-            Matrix m = Matrix.Create(new Double[,]
+            /*Matrix m = Matrix.Create(new Double[,]
             {
                 {2, -1, 0, 0, 0},
                 {-3, 8, -1, 0, 0},
@@ -34,8 +34,9 @@ namespace TestdifferentialEquation
             Console.WriteLine($"Норма вектора невязки:\n{Vector.Substraction(Matrix.MultiplyOnVector(m,x),d).Norm(Vector.NumP.Infinity)}");
 
             Console.WriteLine();
-            Console.WriteLine("********************************************************");
-            Console.WriteLine("y'' + ln(x+2) * y' - (1 + x) * y = e^(x/2)");
+            Console.WriteLine("********************************************************");*/
+            Console.WriteLine("Разностный метод для обыкновенного дифференциального уравнения второго порядка. Метод прогонки.");
+            Console.WriteLine("y'' + (1 + ln(x+2)) * y' - (1 + x) * y = e^(x/2)");
             Console.WriteLine("y'(0) = 0.6 * y(0)");
             Console.WriteLine("y'(1) = -0.3 * y(1)");
 

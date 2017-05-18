@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E7B40F12-E929-431A-A4A2-2506F4A385CA}</ProjectGuid>
+    <ProjectGuid>{BE2D5ACA-873F-4164-9043-66641ED566FB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LinearAlgebra</RootNamespace>
-    <AssemblyName>LinearAlgebra</AssemblyName>
+    <RootNamespace>Integral</RootNamespace>
+    <AssemblyName>Integral</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,15 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Check.cs" />
-    <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="Helpers\ICreator.cs" />
-    <Compile Include="Helpers\MathHelper.cs" />
-    <Compile Include="Matrix\Matrix.cs" />
-    <Compile Include="Vectors\Vector.cs" />
+    <Compile Include="GaussInfo.cs" />
+    <Compile Include="Integration.cs" />
+    <Compile Include="IntegralEquations\Solver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\LinearAlgebra\LinearAlgebra.csproj">
+      <Project>{e7b40f12-e929-431a-a4a2-2506f4a385ca}</Project>
+      <Name>LinearAlgebra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SystemLinearEquation\SystemLinearEquation.csproj">
+      <Project>{69b4c004-3ed4-438d-b0c2-3c2ddb93f570}</Project>
+      <Name>SystemLinearEquation</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

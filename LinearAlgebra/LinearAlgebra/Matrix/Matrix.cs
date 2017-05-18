@@ -15,6 +15,19 @@ namespace LinearAlgebra.Matrix
 
         public int Dimension { get; private set; }
 
+        public double[,] ToArray()
+        {
+            double[,] matrix = new double[Dimension,Dimension];
+            for (int i = 0; i < Dimension; i++)
+            {
+                for (int j = 0; j < Dimension; j++)
+                {
+                    matrix[i, j] = _matrix[i][j];
+                }
+            }
+            return matrix;
+        }
+
         public static Matrix Create(IEnumerable<double> values)
         {
             Check.NotNull(values);
